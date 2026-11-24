@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RideCom</title>
+  <meta name="description" content="Bike-to-bike voice intercom for two riders, using your phones and earphones.">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RideCom">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ============ JOIN SCREEN ============ -->
+  <main id="joinScreen" class="screen">
+    <header class="brand">
+      <img src="icons/icon.svg" alt="" width="64" height="64">
+      <h1>RideCom</h1>
+      <p class="tagline">Talk to your riding buddy through your earphones.</p>
+    </header>
+
+    <form id="joinForm" class="card" autocomplete="off">
+      <label for="roomInput">Room code</label>
+      <input id="roomInput" name="room" type="text" inputmode="text" autocapitalize="characters"
+             spellcheck="false" maxlength="20" placeholder="e.g. RIDE42" required>
+      <p class="hint">You and your friend type the <strong>same</strong> code. Letters and numbers, at least 4.</p>
+      <button id="joinBtn" type="submit" class="btn btn-primary">Join ride</button>
+      <p id="joinError" class="error" role="alert" hidden></p>
+    </form>
+
+    <section class="card tips">
+      <h2>Before you ride</h2>
+      <ul>
+        <li>Connect your earphones first, then tap <strong>Join ride</strong>.</li>
+        <li>Allow microphone access when asked.</li>
+        <li>Add this page to your home screen so it opens like an app.</li>
+        <li>Keep the volume low enough to hear traffic.</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ============ CALL SCREEN ============ -->
+  <main id="callScreen" class="screen" hidden>
+    <div class="topbar">
+      <span class="room-label">Room <strong id="roomLabel"></strong></span>
+      <span id="netBadge" class="badge">Online</span>
+    </div>
+
+    <section id="statusCard" class="status status-wait" aria-live="polite">
+      <div class="status-dot" aria-hidden="true"></div>
+      <div id="statusText" class="status-text">Starting…</div>
+      <div id="statusSub" class="status-sub"></div>
+    </section>
+
+    <section class="meters">
+      <div class="meter-row">
+        <span class="meter-label">Friend</span>
+        <div class="meter"><div id="remoteMeter" class="meter-fill"></div></div>
+      </div>
+      <div class="meter-row">
+        <span class="meter-label">Me</span>
+        <div class="meter"><div id="localMeter" class="meter-fill"></div></div>
+      </div>
+    </section>
+
+    <button id="enableSoundBtn" class="btn btn-warn" hidden>Tap to turn on sound</button>
+
+    <button id="muteBtn" class="btn btn-mute" aria-pressed="false">
+      <span id="muteIcon" aria-hidden="true">🎙️</span>
+      <span id="muteText">Mic ON — tap to mute</span>
+    </button>
+
+    <div class="row">
+      <span id="wakeBadge" class="small-note"></span>
+      <button id="leaveBtn" class="btn btn-ghost">Leave</button>
+    </div>
+
+    <details id="details" class="card details">
+      <summary>Connection details</summary>
+      <dl class="stats">
+        <dt>Role</dt><dd id="statRole">–</dd>
+        <dt>Route</dt><dd id="statRoute">–</dd>
+        <dt>Delay (RTT)</dt><dd id="statRtt">–</dd>
+        <dt>Data in / out</dt><dd id="statData">–</dd>
+        <dt>Reconnects</dt><dd id="statReconnects">0</dd>
+      </dl>
+      <div class="log-head">
+        <span>Event log</span>
+        <button id="copyLogBtn" class="btn btn-small" type="button">Copy log</button>
+      </div>
+      <pre id="logBox" class="log"></pre>
+    </details>
+  </main>
+
+  <audio id="remoteAudio" autoplay playsinline></audio>
+
+  <script src="config.js"></script>
+  <script src="vendor/peerjs-1.5.5.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
